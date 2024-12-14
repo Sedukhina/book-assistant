@@ -1,0 +1,22 @@
+/*Close form buttons*/
+.closeButton{
+	justify-content: right;
+	background-color:#11ffee00;
+	border-color: azure;
+}
+
+.userForm{
+	display: none;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	z-index: 100;
+	white-space: pre-line;
+	width: min(60%, 1200px);
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color:#8479b4;
+	border-radius: 10px;
+}

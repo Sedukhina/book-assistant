@@ -1,0 +1,9 @@
+flask
+
+# db models and interactions
+sqlalchemy
+sqlalchemy_utils
+psycopg2
+
+# Text processing
+#spacy

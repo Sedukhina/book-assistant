@@ -1,0 +1,48 @@
+name: assistant
+
+services:
+  db:
+    container_name: postgres
+    build: ./db
+    restart: always
+    volumes:
+      - data:/var/lib/postgresql/data
+    ports:
+      - "5400:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U username"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  pg-admin:
+    container_name: pgAdmin4
+    image: dpage/pgadmin4
+    restart: on-failure
+    volumes:
+      - pgadmin:/var/lib/pgadmin4/storage
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=test@example.com
+      - PGADMIN_DEFAULT_PASSWORD=admin
+      - PGADMIN_LISTEN_PORT=5050
+    ports:
+      - "5050:5050"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  app:
+    build: ./app
+    volumes:
+     - appdata:/appd
+    restart: on-failure
+    ports:
+      - "5555:5555"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes: 
+  appdata: null
+  data: null
+  pgadmin: null

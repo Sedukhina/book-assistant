@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='forms.css') }}">
+        <script src="{{ url_for('static', filename='forms.js') }}"></script>
+        
+         <!--Registration form-->
+        <div class="userForm" id="registration_form">
+            <button type="button" class="closeButton" onclick="closeForm('registration_form')">x</button>
+            <h1>form</h1>
+        </div>
+
+        <!--Sign in form-->
+        <div class="userForm" id="login_form">
+            <button type="button" class="closeButton" onclick="closeForm('login_form')">x</button>
+            <h1>form</h1>
+        </div>
+    </head>
+    <body>
+        {% block user_admission %}
+            <button onclick="openForm('login_form')">Sign In</button>
+            <button onclick="openForm('registration_form')">Sign Up</button>
+        {% endblock %}
+    </body>
+</html>
