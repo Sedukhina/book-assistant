@@ -8,6 +8,7 @@
 
 {% block extra_js %}
     <script type="module" src="{{ url_for('static', filename='js/home.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -15,5 +16,11 @@
 <section class="hero">
     <h1>Welcome to BookAssistant</h1>
     <p>Great to see you again, {{ username }}!</p>
+</section>
+
+<section class="chat-section">
+    <h2>Голосовий чат</h2>
+    <div class="chat-container" id="chatContainer"></div>
+    <button id="recordButton" class="btn-primary">Записати голос</button>
 </section>
 {% endblock %}
