@@ -1,4 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, jsonify, render_template
+from tts import text_to_speech_ukrainian
+from stt import record_and_recognize
+from scenarios import process_command
+import os
 
 app = Flask(__name__)
 app.secret_key = "REPLACE_WITH_A_SECRET_KEY"  # Required for session handling
