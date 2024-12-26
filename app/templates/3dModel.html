@@ -1,0 +1,20 @@
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/3dModel.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+{% endblock %}
+
+<div id="model-container" class="model-container">
+<model-viewer
+        class="model-viewer"
+        id="myModel"
+        src="{{ url_for('static', filename='models/owl.glb') }}"
+        alt="3D model"
+        animation-name="Eat"
+        camera-orbit="0.41946417023335075rad 1.407699015316264rad 1.7935290423951666m"
+        autoplay
+        shadow-intensity="1"
+></model-viewer>
+</div>
