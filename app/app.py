@@ -61,6 +61,29 @@ def logout():
     session.pop("username", None)
     return redirect(url_for("home"))
 
+@app.route('/chat/record', methods=['GET'])
+def chat_record():
+    """
+    Записує голос, обробляє команду та повертає відповідь із текстом і аудіо.
+    """
+    text = record_and_recognize()
+    response = process_command(text)
+    tts_path = "static/response.mp3"
+
+    # Генерація нового аудіофайлу
+    if os.path.exists(tts_path):
+        os.remove(tts_path)
+    text_to_speech_ukrainian(response, tts_path)
+
+    return jsonify({'text': text, 'response': response, 'audio_file': f'/{tts_path}'})
+
+@app.route('/chat', methods=['GET'])
+def chat_interface():
+    """
+    Рендерить HTML-інтерфейс чату.
+    """
+    return render_template('chat.html')
+
 if __name__ == '__main__':
     # init_db()
     app.run(debug=True, host='0.0.0.0', port=5555)
