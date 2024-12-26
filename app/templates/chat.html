@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Голосовий чат</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+</head>
+<body>
+    <h1>Голосовий чат</h1>
+    <div class="chat-container" id="chatContainer"></div>
+    <button id="recordButton">Записати голос</button>
+    <script src="{{ url_for('static', filename='js/chat.js') }}"></script>
+</body>
+</html>
