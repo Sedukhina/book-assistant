@@ -4,6 +4,7 @@ from tts import text_to_speech_ukrainian
 from stt import record_and_recognize
 from scenarios import process_command
 import os
+from db.db import init_db
 
 app = Flask(__name__)
 app.secret_key = "REPLACE_WITH_A_SECRET_KEY"  # Required for session handling
@@ -90,5 +91,5 @@ def chat_interface():
     return render_template('chat.html')
 
 if __name__ == '__main__':
-    # init_db()
+    init_db()
     app.run(debug=True, host='0.0.0.0', port=5555)

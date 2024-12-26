@@ -5,5 +5,8 @@ sqlalchemy
 sqlalchemy_utils
 psycopg2
 
+gtts
+SpeechRecognition
+
 # Text processing
 #spacy

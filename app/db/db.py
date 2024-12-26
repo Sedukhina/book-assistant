@@ -7,9 +7,13 @@ from sqlalchemy_utils import database_exists, create_database
 
 
 def init_db():
+    print("DB initiation started")
     engine = create_engine(DATABASE_URL)
-    if not database_exists(engine.url):
-        create_database(engine.url)
+    # TODO: DB existance check
+    if True: #not database_exists(engine.url):
+        print("DB doesn't exist. Creation process started.")
+        #create_database(engine.url)
         Base.metadata.create_all(engine)
-        #populate()
+        populate()
+    print("DB initiation finished")
     

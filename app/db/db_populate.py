@@ -1,14 +1,30 @@
 import csv
 from db.db_models import *
 from sqlalchemy.orm import sessionmaker
-
+from sqlalchemy import create_engine
+from datetime import datetime
 from db.db_url import DATABASE_URL
 
 def add_row_to_db():
     pass
 
+def ParseDate(date_str):
+    """Parses a date string with multiple supported formats."""
+    formats = [
+        "%Y-%m-%d",  # 2023-10-27
+        "%Y",       # 2023
+        "%Y-%m",    # 2005-02 (Added support)
+    ]
+    for fmt in formats:
+        try:
+            return datetime.strptime(date_str, fmt).date()
+        except ValueError:
+            pass  # Try the next format
+    return None  # If no format matches
+
 def populate():
-    books_csv = "app\\db\\data\\merged_data.csv"
+    #books_csv = "/app/db/data/merged_data.csv"
+    books_csv = "/app/db/data/data_short.csv"
 
     # Create database engine and session
     engine = create_engine(DATABASE_URL)
@@ -20,6 +36,7 @@ def populate():
             reader = csv.DictReader(file)
             # For each row in csv
             for row in reader:
+                #print(row)
                 # Authors are stored as a string in csv, so parsing it to get list 
                 # and using book_author_association table to normalize many-to-many relationship 
                 authors_str = row['authors'].strip("[]")
@@ -31,9 +48,9 @@ def populate():
                         author = AuthorBase(name=author_name)
                         session.add(author)
                         session.flush()  # Flush to get the author_id
-                    authors.append(author)
+                    #authors.append(author)
                 
-
+                
                 # Handle publishers
                 publisher_name = row['publisher'].strip()
                 publisher = session.query(PublisherBase).filter_by(name=publisher_name).first()
@@ -42,25 +59,27 @@ def populate():
                     session.add(publisher)
                     session.flush()  # Flush to get the publisher_id
 
+                book = session.query(BookBase).filter_by(id=row['Id']).first()
+                if not book:
                 # Insert the book
-                book = BookBase(
-                    id=int(row['Id']),
-                    title=row['Title'].strip(),
-                    description=row['description'].strip(),
-                    author_id=author.author_id,
-                    publisher_id=publisher.publisher_id,
-                    published_date=datetime.strptime(row['publishedDate'], "%Y-%m-%d").date()
-                    if row['publishedDate'] else None,
-                    category=row['categories'].strip(),
-                    ratings_count=float(row['ratingsCount']) if row['ratingsCount'] else None,
-                )
-                session.add(book)
-                session.flush()  # Flush to get the book_id
-
+                    book = BookBase(
+                        id=row['Id'],
+                        title=row['Title'].strip(),
+                        description=row['description'].strip(),
+                        author_id=author.author_id,
+                        publisher_id=publisher.publisher_id,
+                        published_date = ParseDate(row['publishedDate'])
+                        if row['publishedDate'] else None,
+                        category=row['categories'].strip(),
+                        ratings_count=float(row['ratingsCount']) if row['ratingsCount'] else None,
+                    )
+                    session.add(book)
+                    session.flush()  # Flush to get the book_id
+                
                 # Insert the review
                 review = AmazonReviewBase(
                     book_id=book.id,
-                    user_id=int(row['User_id']),
+                    user_id=row['User_id'],
                     review_helpfulness=row['review/helpfulness'],
                     review_score=float(row['review/score']) if row['review/score'] else None,
                     review_time=datetime.fromtimestamp(int(row['review/time'])) if row['review/time'] else None,

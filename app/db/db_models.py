@@ -6,8 +6,8 @@ Base = declarative_base()
 class BookBase(Base):
     __tablename__ = 'books'
 
-    id = Column(Integer, primary_key=True)
-    title = Column(String(255))
+    id = Column(Text, primary_key=True)
+    title = Column(Text)
     description = Column(Text)
     author_id = Column(Integer, ForeignKey('authors.author_id'))
     publisher_id = Column(Integer, ForeignKey('publishers.publisher_id'))
@@ -30,7 +30,7 @@ class AuthorBase(Base):
 
 # Table for author/book relashionships normalization
 book_author_association = Table('book_author', Base.metadata, 
-                                Column('book_id', Integer, ForeignKey('books.id'), primary_key=True), 
+                                Column('book_id', Text, ForeignKey('books.id'), primary_key=True), 
                                 Column('author_id', Integer, ForeignKey('authors.author_id'), primary_key=True)
 )
 
@@ -46,9 +46,9 @@ class AmazonReviewBase(Base):
     __tablename__ = 'amazon_reviews'
 
     review_id = Column(Integer, primary_key=True)
-    book_id = Column(Integer, ForeignKey('books.id'))
-    user_id = Column(Integer)
-    review_helpfulness = Column(String(10))
+    book_id = Column(Text, ForeignKey('books.id'))
+    user_id = Column(Text)
+    review_helpfulness = Column(String(20))
     review_score = Column(Numeric)
     review_time = Column(TIMESTAMP)
     review_summary = Column(Text)
