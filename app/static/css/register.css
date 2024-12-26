@@ -1,0 +1,63 @@
+/* register.css - Additional styles for register.html */
+
+.form-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 150px);
+    padding: 2rem;
+}
+
+.form-box {
+    background-color: #fff;
+    border-radius: 6px;
+    padding: 2rem;
+    max-width: 400px;
+    width: 100%;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.form-box h2 {
+    margin-bottom: 1.5rem;
+    color: #563C28;
+}
+
+.input-group {
+    margin-bottom: 1rem;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 0.3rem;
+    font-weight: 600;
+    color: #3E2723;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 0.6rem;
+    border: 1px solid #CCC;
+    border-radius: 4px;
+}
+
+.btn-submit {
+    width: 100%;
+    margin-top: 1rem;
+    padding: 0.7rem;
+    background-color: #563C28;
+    color: #F5F3EE;
+    border: none;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-submit:hover {
+    background-color: #3E2723;
+}
+
+.switch-form {
+    margin-top: 1rem;
+    font-size: 0.9rem;
+    text-align: center;
+}

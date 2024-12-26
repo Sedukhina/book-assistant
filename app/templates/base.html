@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}BookAssistant{% endblock %}</title>
+
+    <!-- Common / Base Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <!-- Placeholder for page-specific CSS -->
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+<!-- Navbar -->
+<header>
+    <nav class="topbar">
+        <!-- Left side: Logo + Home -->
+        <ul class="nav-left">
+            <li class="logo">BookAssistant</li>
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+        </ul>
+
+        <!-- Right side: Login/Register OR Username Dropdown -->
+        <ul class="nav-right">
+            {% if session.get('username') %}
+            <li class="dropdown">
+                <!-- Username becomes the dropdown trigger -->
+                <a href="#" class="dropbtn">{{ session.username }}</a>
+                <div class="dropdown-content">
+                    <a href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            <li><a href="{{ url_for('register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+</header>
+
+<!-- Page Content -->
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer>
+    <p>© 2024 BookAssistant. All rights reserved.</p>
+</footer>
+</body>
+</html>

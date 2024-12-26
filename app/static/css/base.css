@@ -1,0 +1,115 @@
+/*****************************************
+  1) GLOBAL RESETS & BASE STYLING
+ *****************************************/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Open Sans", sans-serif;
+    background-color: #FAF7F2; /* Subtle paper-like background */
+    color: #333;
+}
+
+/*****************************************
+  2) NAVIGATION BAR
+ *****************************************/
+.topbar {
+    display: flex;
+    justify-content: space-between; /* Splits left and right nav sections */
+    background-color: #563C28;     /* Rich brown */
+    padding: 1rem 2rem;
+}
+
+/* Nav Lists */
+.nav-left,
+.nav-right {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+/* Logo */
+.logo {
+    font-family: "Playfair Display", serif;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #F5F3EE; /* Off-white text */
+}
+
+/* Standard nav links (e.g., Home, Login, Register) */
+.nav-left a,
+.nav-right a {
+    color: #F5F3EE;
+    text-decoration: none;
+    font-weight: 600;
+    transition: opacity 0.2s;
+}
+
+.nav-left a:hover,
+.nav-right a:hover {
+    opacity: 0.8;
+}
+
+/*****************************************
+  3) USERNAME DROPDOWN
+ *****************************************/
+.dropdown {
+    position: relative; /* For absolutely-positioned dropdown content */
+}
+
+.dropbtn {
+    /* Looks like a link but triggers the dropdown */
+    color: #F5F3EE;
+    text-decoration: none;
+    font-weight: 600;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* No extra padding, so it looks like a normal nav link */
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;               /* Aligns dropdown to the right edge of parent <li> */
+    background-color: #FFFFFF;
+    min-width: 100px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    z-index: 999;           /* Ensure it appears above other elements */
+}
+
+.dropdown-content a {
+    display: block;
+    color: #333;
+    padding: 0.6rem 1rem;
+    text-decoration: none;
+    font-weight: 400;
+}
+
+/* Hover effect in dropdown */
+.dropdown-content a:hover {
+    background-color: #f2f2f2;
+}
+
+/* Show the dropdown on hover */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+/*****************************************
+  4) FOOTER
+ *****************************************/
+footer {
+    text-align: center;
+    padding: 1rem;
+    background-color: #F0ECE5;
+    color: #777;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}

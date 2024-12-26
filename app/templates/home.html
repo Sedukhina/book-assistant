@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}Home – BookAssistant{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <h1>Welcome to BookAssistant</h1>
+    {% if username %}
+    <p>Great to see you again, {{ username }}!</p>
+    {% else %}
+    <p>Your personal library companion for organizing and enjoying books.</p>
+    <div class="cta-buttons">
+        <a href="{{ url_for('login') }}" class="btn-primary">Login</a>
+        <a href="{{ url_for('register') }}" class="btn-secondary">Register</a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

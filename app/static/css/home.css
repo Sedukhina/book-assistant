@@ -1,0 +1,53 @@
+/* home.css - Additional styles for home.html */
+.hero {
+    text-align: center;
+    margin: 4rem auto;
+    max-width: 600px;
+}
+
+.hero h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 2.5rem;
+    color: #3E2723;
+    margin-bottom: 1rem;
+}
+
+.hero p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    margin-bottom: 2rem;
+    color: #555;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+/* Buttons for this hero section */
+.btn-primary,
+.btn-secondary {
+    text-decoration: none;
+    padding: 0.7rem 1.2rem;
+    font-weight: 600;
+    border-radius: 4px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-primary {
+    background-color: #563C28;
+    color: #F5F3EE;
+}
+.btn-primary:hover {
+    background-color: #3E2723;
+}
+
+.btn-secondary {
+    background-color: #F5F3EE;
+    color: #563C28;
+    border: 1px solid #563C28;
+}
+.btn-secondary:hover {
+    background-color: #DDD2C6;
+}
