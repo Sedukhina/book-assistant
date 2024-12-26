@@ -113,3 +113,27 @@ footer {
     left: 0;
     right: 0;
 }
+
+.toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%); /* Center horizontally */
+    background-color: #ffe4e4;   /* Light red/pink background */
+    color: #b00;                /* Dark red text */
+    padding: 1rem 1.5rem;
+    border: 1px solid #b00;
+    border-radius: 4px;
+    z-index: 9999;
+    font-weight: 600;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+
+    /* Optional fade-out after a few seconds (comment out if undesired) */
+    animation: fadeOut 5s forwards;
+}
+
+@keyframes fadeOut {
+    0%   { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; }
+}

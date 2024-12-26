@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 
 app = Flask(__name__)
 app.secret_key = "REPLACE_WITH_A_SECRET_KEY"  # Required for session handling
 
 # In-memory user store (for demo). In production, use a real DB & hashed passwords.
-users = {}
+users = {
+    "admin": "admin",
+}
 
 @app.route("/")
 def home():
@@ -17,14 +19,18 @@ def home():
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        form_username = request.form["username"]
-        form_password = request.form["password"]
+        username = request.form.get("username")
+        password = request.form.get("password")
 
-        if form_username in users and users[form_username] == form_password:
-            session["username"] = form_username
-            return redirect(url_for("home"))
-        else:
-            return "Invalid credentials. Please try again."
+        # Validate credentials
+        if username not in users or users[username] != password:
+            # Instead of returning a plain message, flash an error
+            flash("Invalid credentials. Please try again.", "error")
+            return redirect(url_for("login"))
+
+        # If valid, log the user in
+        session["username"] = username
+        return redirect(url_for("home"))
 
     return render_template("login.html")
 
@@ -35,7 +41,8 @@ def register():
         form_password = request.form["password"]
 
         if form_username in users:
-            return "Username already taken!"
+            flash("Username already taken!", "error")
+            return render_template("register.html")
 
         users[form_username] = form_password
         session["username"] = form_username  # auto-login

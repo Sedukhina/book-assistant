@@ -38,6 +38,18 @@
 </header>
 
 <!-- Page Content -->
+
+<!-- TOAST MESSAGES (for errors) -->
+{% with messages = get_flashed_messages(category_filter=["error"]) %}
+{% if messages %}
+<div class="toast error-toast">
+    {% for msg in messages %}
+    <p>{{ msg }}</p>
+    {% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
 <main>
     {% block content %}{% endblock %}
 </main>
