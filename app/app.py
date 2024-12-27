@@ -14,6 +14,40 @@ users = {
     "admin": "admin",
 }
 
+BOOKS = [
+    {
+        "title": "The Great Gatsby",
+        "author": "F. Scott Fitzgerald",
+        "categories": ["Classic", "Novel"],
+        "publishDate": 1925
+    },
+    {
+        "title": "A Brief History of Time",
+        "author": "Stephen Hawking",
+        "categories": ["Non-fiction", "Physics"],
+        "publishDate": 1988
+    },
+    {
+        "title": "Pride and Prejudice",
+        "author": "Jane Austen",
+        "categories": ["Classic", "Novel"],
+        "publishDate": 1813
+    },
+    {
+        "title": "The Martian",
+        "author": "Andy Weir",
+        "categories": ["Novel", "Survival"],
+        "publishDate": 2011
+    },
+    {
+        "title": "The Selfish Gene",
+        "author": "Richard Dawkins",
+        "categories": ["Non-fiction", "Biology"],
+        "publishDate": 1976
+    },
+]
+
+
 @app.route("/")
 def home():
     # Checka if user is logged in
@@ -21,6 +55,62 @@ def home():
         return render_template("home.html", username=session["username"])
     else:
         return redirect(url_for("login"))
+
+
+@app.route("/books")
+def books():
+    """
+    Serves the books.html file (client-side logic).
+    """
+    return render_template("books.html")
+
+@app.route("/api/books", methods=["GET"])
+def get_books_api():
+    """
+    Returns a JSON list of filtered books.
+    Filters are passed via query parameters:
+      ?title=...&genre=...&author=...&categories=cat1,cat2&year_from=1900&year_to=2000
+    """
+    title = request.args.get("title", "").strip().lower()
+    genre = request.args.get("genre", "").strip().lower()
+    author = request.args.get("author", "").strip().lower()
+    categories_str = request.args.get("categories", "")  # e.g. "Classic,Novel"
+    year_from_str = request.args.get("year_from", "")
+    year_to_str = request.args.get("year_to", "")
+
+    selected_categories = [c.strip() for c in categories_str.split(",") if c.strip()]
+
+    try:
+        year_from = int(year_from_str) if year_from_str else None
+        year_to = int(year_to_str) if year_to_str else None
+    except ValueError:
+        year_from = None
+        year_to = None
+
+    filtered = []
+    for book in BOOKS:
+        # 1) title check (substring)
+        if title and title not in book["title"].lower():
+            continue
+        # 2) genre check (exact)
+        if genre and genre != book["genre"].lower():
+            continue
+        # 3) author check (substring)
+        if author and author not in book["author"].lower():
+            continue
+        # 4) categories check
+        if selected_categories:
+            if not all(cat in book["categories"] for cat in selected_categories):
+                continue
+        # 5) year range
+        if year_from and book["publishDate"] < year_from:
+            continue
+        if year_to and book["publishDate"] > year_to:
+            continue
+
+        filtered.append(book)
+
+    return jsonify(filtered)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
