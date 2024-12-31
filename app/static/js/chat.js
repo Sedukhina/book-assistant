@@ -1,5 +1,11 @@
+import { setAnimation } from './3dModel.js';
+
+
 document.getElementById('recordButton').addEventListener('click', async () => {
     const chatContainer = document.getElementById('chatContainer');
+
+    // Change animation to "Spin" when recording starts
+    setAnimation('Spin');
 
     const recordingMessage = document.createElement('div');
     recordingMessage.className = 'message assistant-message';
@@ -27,7 +33,18 @@ document.getElementById('recordButton').addEventListener('click', async () => {
             audio.controls = true;
             audio.src = `${data.audio_file}?t=${new Date().getTime()}`;
             assistantMessage.appendChild(audio);
+
+            // Change animation to "Eat" while audio is playing
             audio.play();
+            setAnimation('Eat');
+
+            // When audio ends, return to idle animation
+            audio.addEventListener('ended', () => {
+                setAnimation('Idle_A');
+            });
+        } else {
+            // If no audio file is returned, revert to idle
+            setAnimation('Idle_A');
         }
 
         chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -39,5 +56,8 @@ document.getElementById('recordButton').addEventListener('click', async () => {
         errorMessage.innerText = 'Помилка запису або розпізнавання.';
         chatContainer.appendChild(errorMessage);
         chatContainer.scrollTop = chatContainer.scrollHeight;
+
+        // Revert animation to idle in case of error
+        setAnimation('Idle_A');
     }
 });
