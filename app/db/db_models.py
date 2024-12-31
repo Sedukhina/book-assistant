@@ -20,6 +20,29 @@ class BookBase(Base):
     publisher = relationship("PublisherBase", back_populates="books")
     reviews = relationship("AmazonReviewBase", back_populates="book")
 
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "author": self.author.name if self.author else None,
+            "publisher_id": self.publisher_id,
+            "published_date": self.published_date.isoformat() if self.published_date else None,
+            "category": self.category,
+            "cover": self.cover,
+            "ratings_count": float(self.ratings_count) if self.ratings_count else None,
+        }
+    def to_preview(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "author_id":self.author.author_id if self.author else None,
+            "author": self.author.name if self.author else None,
+            "publishDate": int(self.published_date.year) if self.published_date else None,
+            "categories": self.category.strip().split('&') if self.category else [],
+            "cover": self.cover,
+        }
+
 class AuthorBase(Base):
     __tablename__ = 'authors'
 
