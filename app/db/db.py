@@ -3,6 +3,7 @@ from db.db_models import Base
 from db.db_populate import populate
 
 from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 
 
@@ -16,4 +17,9 @@ def init_db():
         Base.metadata.create_all(engine)
         populate()
     print("DB initiation finished")
-    
+
+
+def get_session():
+    engine = create_engine(DATABASE_URL)
+    session = sessionmaker(bind=engine)
+    return session()
