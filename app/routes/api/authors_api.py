@@ -15,7 +15,7 @@ authors_api = Blueprint('authors_api',__name__,url_prefix='/authors')
 @authors_api.route('/names',methods=['GET'])
 def get_names():
     try:
-        authors = book_service.get_authors_names()
+        authors = books_service.get_authors_names()
         return jsonify([{"id": author.author_id, "name": author.name} for author in authors])
     except Exception as e:
         print(f"Error: {e}")
