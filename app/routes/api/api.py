@@ -6,7 +6,7 @@ from routes.api.authors_api import authors_api
 
 from routes.api.user_api import user_api
 
-from routes.api.preferences_routes import preferences_api
+from routes.api.preferences_api import preferences_api
 
 api_routes = Blueprint('api',__name__,url_prefix='/api')
 
