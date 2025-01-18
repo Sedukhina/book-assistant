@@ -1,3 +1,6 @@
+import json
+from textwrap import indent
+
 from sqlalchemy import Column, Integer, String, Text, Date, Numeric, ForeignKey, TIMESTAMP, Table
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -42,6 +45,18 @@ class BookBase(Base):
             "categories": self.category.strip().split('&') if self.category else [],
             "cover": self.cover,
         }
+    def to_json(self):
+        return json.dumps({
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "author": self.author.name if self.author else None,
+            "publisher_id": self.publisher_id,
+            "published_date": self.published_date.isoformat() if self.published_date else None,
+            "category": self.category,
+            "cover": self.cover,
+            "ratings_count": float(self.ratings_count) if self.ratings_count else None,
+        },indent=4)
 
 class AuthorBase(Base):
     __tablename__ = 'authors'
@@ -50,6 +65,13 @@ class AuthorBase(Base):
     name = Column(String(255), unique=True)
 
     books = relationship("BookBase", back_populates="author")
+
+    def to_dict(self):
+        return {
+            "author_id": self.author_id,
+            "name": self.name,
+            "books": [book.id for book in self.books] if self.books else []
+        }
 
 # Table for author/book relashionships normalization
 book_author_association = Table('book_author', Base.metadata, 
