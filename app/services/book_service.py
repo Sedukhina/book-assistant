@@ -14,7 +14,8 @@ class BookService:
         Return book by id
         """
         try:
-            return self.session.query(BookBase).filter(BookBase.id == book_id).first()
+            raw = self.session.query(BookBase).filter(BookBase.id == book_id).first()
+            return raw.to_dict()
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -23,7 +24,8 @@ class BookService:
         Return all books with param in title
         """
         try:
-            return  self.session.query(BookBase).filter(BookBase.title.ilike(f"%{title}%")).all()
+            raw = self.session.query(BookBase).filter(BookBase.title.ilike(f"%{title}%")).all()
+            return  [book.to_dict() for book in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -32,7 +34,8 @@ class BookService:
         Return single book by title
         """
         try:
-            return  self.session.query(BookBase).filter(BookBase.title.ilike(f"%{title}%")).first()
+            raw = self.session.query(BookBase).filter(BookBase.title.ilike(f"%{title}%")).first()
+            return raw.to_dict()
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -41,13 +44,15 @@ class BookService:
          Returns all authors
         """
         try:
-            return self.session.query(BookBase).all()
+            raw = self.session.query(BookBase).all()
+            return  [book.to_dict() for book in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
     def find_author_by_id(self,author_id):
         try:
-            return self.session.query(AuthorBase).filter(AuthorBase.author_id == author_id).first()
+            raw = self.session.query(AuthorBase).filter(AuthorBase.author_id == author_id).first()
+            return [author.to_dict() for author in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -56,7 +61,8 @@ class BookService:
         Return author by name
         """
         try:
-            return self.session.query(AuthorBase).filter(AuthorBase.name.ilike(f"%{name}%")).first()
+            raw = self.session.query(AuthorBase).filter(AuthorBase.name.ilike(f"%{name}%")).first()
+            return  raw.to_dict()
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -65,7 +71,8 @@ class BookService:
             Returns all authors
         """
         try:
-            return self.session.query(AuthorBase).all()
+            raw = self.session.query(AuthorBase).all()
+            return [author.to_dict() for author in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -74,12 +81,8 @@ class BookService:
             Returns author's books
         """
         try:
-            return (
-                self.session.query(BookBase)
-                .join(AuthorBase, BookBase.author_id == AuthorBase.id)
-                .filter(AuthorBase.name.ilike(f"%{author_name}%"))
-                .all()
-            )
+            raw = self.session.query(BookBase).join(AuthorBase, BookBase.author_id == AuthorBase.id).filter(AuthorBase.name.ilike(f"%{author_name}%")).all()
+            return  [book.to_dict() for book in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -88,11 +91,9 @@ class BookService:
         Finds all books written by a specific author using `author_id`.
         """
         try:
-            return (
-                self.session.query(BookBase)
-                .filter(BookBase.author_id == author_id)
-                .all()
-            )
+            raw = self.session.query(BookBase).filter(BookBase.author_id == author_id).all()
+            return  [book.to_dict() for book in raw]
+
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -119,7 +120,9 @@ class BookService:
             if filters.get('published_year_to'):
                 query = query.filter(BookBase.published_date <= f"{filters['published_year_to']}-12-31")
 
-            return query.all()
+            raw = query.all()
+            data = [book.to_dict() for book in raw]
+            return data
         except SQLAlchemyError as e:
             print(f"error {e}")
             raise
@@ -130,11 +133,11 @@ class BookService:
         """
         try:
             results = (
-                self.session.query(BookBase.id, BookBase.title, AuthorBase.name.label("author_name"))
+                self.session.query(BookBase)
                 .join(AuthorBase, BookBase.author_id == AuthorBase.author_id)
                 .all()
             )
-            return results
+            return [book.to_dict() for book in results]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -143,7 +146,8 @@ class BookService:
             Returns simplified books previews (id, title)
         """
         try:
-            return self.session.query(BookBase.id,BookBase.title).all()
+            raw = self.session.query(BookBase).all()
+            return [book.to_dict() for book in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
 
@@ -152,6 +156,7 @@ class BookService:
             Returns simplified authors previews (id, name)
         """
         try:
-            return self.session.query(AuthorBase.author_id,AuthorBase.name).all()
+            raw = self.session.query(AuthorBase).all()
+            return [author.to_dict() for author in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
