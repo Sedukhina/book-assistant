@@ -10,3 +10,6 @@ SpeechRecognition
 
 # Text processing
 #spacy
+
+openai
+pydantic
