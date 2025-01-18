@@ -38,9 +38,9 @@ def get_books():
         filtered = book_service.get_filtered_books(**filters)
 
         #convert it to json-readable format
-        filtered_books = [book.to_preview() for book in filtered]
+        # filtered_books = [book for book in filtered]
 
-        return jsonify(filtered_books)
+        return jsonify(filtered)
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
@@ -58,7 +58,7 @@ def book_details():
         if book is None:
             return jsonify({"error": "Book doesn't exist"}), 404
 
-        return jsonify(book.to_preview())
+        return jsonify(book)
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
