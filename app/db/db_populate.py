@@ -5,9 +5,6 @@ from sqlalchemy import create_engine
 from datetime import datetime
 from db.db_url import DATABASE_URL
 
-def add_row_to_db():
-    pass
-
 def ParseDate(date_str):
     """Parses a date string with multiple supported formats."""
     formats = [
@@ -21,6 +18,7 @@ def ParseDate(date_str):
         except ValueError:
             pass  # Try the next format
     return None  # If no format matches
+
 
 def AddRow(row, session):
                     # Authors are stored as a string in csv, so parsing it to get list 
@@ -45,6 +43,13 @@ def AddRow(row, session):
                         session.add(publisher)
                         session.flush()  # Flush to get the publisher_id
 
+                    category_name = row['categories'].strip()
+                    category = session.query(BookCategoryBase).filter_by(name=category_name).first()
+                    if not category:
+                        category = BookCategoryBase(name=category_name)
+                        session.add(category)
+                        session.flush()
+
                     book = session.query(BookBase).filter_by(id=row['Id']).first()
                     if not book:
                     # Insert the book
@@ -55,7 +60,7 @@ def AddRow(row, session):
                             author_id=author.author_id,
                             publisher_id=publisher.publisher_id,
                             published_date = ParseDate(row['publishedDate']) if row['publishedDate'] else None,
-                            category=row['categories'].strip(),
+                            category_id=category.id,
                             ratings_count=float(row['ratingsCount']) if row['ratingsCount'] else None,
                             cover = row['image'] if row['image'] else None
                         )

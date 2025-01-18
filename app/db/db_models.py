@@ -3,6 +3,12 @@ from sqlalchemy.orm import declarative_base, relationship
 
 Base = declarative_base()
 
+class BookCategoryBase(Base):
+    __tablename__ = 'categories'
+
+    id = Column(Integer, primary_key=True)
+    name = Column(Text)
+
 class BookBase(Base):
     __tablename__ = 'books'
 
@@ -12,7 +18,7 @@ class BookBase(Base):
     author_id = Column(Integer, ForeignKey('authors.author_id'))
     publisher_id = Column(Integer, ForeignKey('publishers.publisher_id'))
     published_date = Column(Date)
-    category = Column(Text)
+    category_id = Column(Integer, ForeignKey('categories.id'))
     cover = Column(Text)
     ratings_count = Column(Numeric)
 
@@ -39,7 +45,7 @@ class BookBase(Base):
             "author_id":self.author.author_id if self.author else None,
             "author": self.author.name if self.author else None,
             "publishDate": int(self.published_date.year) if self.published_date else None,
-            "categories": self.category.strip().split('&') if self.category else [],
+            "categories": self.category_id if self.category_id else -1,
             "cover": self.cover,
         }
 
@@ -50,12 +56,6 @@ class AuthorBase(Base):
     name = Column(String(255), unique=True)
 
     books = relationship("BookBase", back_populates="author")
-
-# Table for author/book relashionships normalization
-book_author_association = Table('book_author', Base.metadata, 
-                                Column('book_id', Text, ForeignKey('books.id'), primary_key=True), 
-                                Column('author_id', Integer, ForeignKey('authors.author_id'), primary_key=True)
-)
 
 class PublisherBase(Base):
     __tablename__ = 'publishers'
@@ -82,10 +82,15 @@ class AmazonReviewBase(Base):
 class UserBase(Base):
     __tablename__ = 'users'
 
-    user_ID = Column(Integer, primary_key=True)
+    user_id = Column(Integer, primary_key=True)
     email = Column(String(254), nullable=False, unique=True)
     username = Column(String(255), nullable=False)
     birthday = Column(Date, nullable=False)
     hashed_password = Column(String(300), nullable=False)
 
 
+class UserFavourites(Base):
+    __tablename__ = 'favourites'
+
+    book_id = Column(Text, ForeignKey('books.id'), primary_key=True) 
+    user_id = Column(Integer, ForeignKey('users.user_id'), primary_key=True)
