@@ -89,10 +89,10 @@ class PreferencesService:
 
 
     def get_books_data(self):
-        return [self.books_service.find_by_id(book_id).to_dict() for book_id in self.preferences.books]
+        return [self.books_service.find_by_id(book_id) for book_id in self.preferences.books]
 
     def get_authors_data(self):
-        return [self.book_service.find_author_by_id(author_id).to_dict() for author_id in self.preferences.authors]
+        return [self.books_service.find_author_by_id(author_id) for author_id in self.preferences.authors]
 
     def get_categories_data(self):
         return self.preferences.categories
