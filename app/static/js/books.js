@@ -93,7 +93,8 @@ document.addEventListener("DOMContentLoaded", () => {
       img.alt = `${book.title} cover`;
       // If your data has a "cover" property, use it; otherwise placeholder
       if (book.cover) {
-        img.src = `/static/img/covers/${book.cover}`;
+        //img.src = `/static/img/covers/${book.cover}`;
+        img.src = `${book.cover}`;
       } else {
         img.src = `/static/img/bookCover.png`;
       }

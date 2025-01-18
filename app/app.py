@@ -6,7 +6,7 @@ from routes.api.api import api_routes
 from routes.book_routes import books_bp
 from tts import text_to_speech_ukrainian
 from stt import record_and_recognize
-from scenarios import process_command,command
+from scenarios import process_command
 import os
 from db.db import init_db
 
@@ -64,12 +64,12 @@ def home():
         return redirect(url_for("login"))
 
 
-# @app.route("/books",methods=['GET'])
-# def books():
-#     """
-#     Serves the books.html file (client-side logic).
-#     """
-#     return render_template("books.html")
+@app.route("/books",methods=['GET'])
+def books():
+     """
+     Serves the books.html file (client-side logic).
+     """
+     return render_template("books.html")
 #
 # @app.route("/api/books", methods=["GET"])
 # def get_books_api():
