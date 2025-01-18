@@ -131,3 +131,34 @@ def remove_category():
     service.remove_category(category_name)
     return jsonify({"message": "Category removed"})
 
+@preferences_api.route('/data/books', methods=['GET'])
+def get_books_data():
+    username = session.get('username')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+    service = PreferencesService(username)
+    return jsonify(service.get_books_data())
+
+@preferences_api.route('/data/authors', methods=['GET'])
+def get_authors_data():
+    username = session.get('username')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+    service = PreferencesService(username)
+    return jsonify(service.get_authors_data())
+
+@preferences_api.route('/data/categories', methods=['GET'])
+def get_categories_data():
+    username = session.get('username')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+    service = PreferencesService(username)
+    return jsonify(service.get_categories_data())
+
+@preferences_api.route('/preferences/data/all', methods=['GET'])
+def get_all_data():
+    username = session.get('username')
+    if not username:
+        return jsonify({"error": "Unauthorized"}), 401
+    service = PreferencesService(username)
+    return jsonify(service.get_all_data())

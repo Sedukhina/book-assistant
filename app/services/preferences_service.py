@@ -1,6 +1,10 @@
 import json
 import os.path
 from pydantic import BaseModel,Field
+from services.book_service import BookService
+
+from db.db import get_session
+
 
 class UserPreferences(BaseModel):
     books: list[str] = Field(default_factory=list) #stores ids
@@ -12,6 +16,7 @@ class PreferencesService:
         self.username = username
         self.file_path = os.path.join(os.getcwd(),'data','user_preferences',f"{self.username}_preferences.json")
         self.preferences = UserPreferences()
+        self.books_service : BookService = BookService(get_session())
         self.load_preferences()
 
     def load_preferences(self):
@@ -81,3 +86,20 @@ class PreferencesService:
         if category_name in self.preferences.categories:
             self.preferences.categories.remove(category_name)
             self.save_preferences()
+
+
+    def get_books_data(self):
+        return [self.books_service.find_by_id(book_id).to_dict() for book_id in self.preferences.books]
+
+    def get_authors_data(self):
+        return [self.book_service.find_author_by_id(author_id).to_dict() for author_id in self.preferences.authors]
+
+    def get_categories_data(self):
+        return self.preferences.categories
+
+    def get_all_data(self):
+        return {
+            "books": self.get_books_data(),
+            "authors":self.get_authors_data(),
+            "categories":self.get_categories_data()
+        }
