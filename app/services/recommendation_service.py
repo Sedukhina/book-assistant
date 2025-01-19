@@ -16,23 +16,25 @@ class BookRecommendation(BaseModel):
         categories: list[str] = Field(default_factory=list)
         author: str
         isbn: str
-        cover_link: str
+        # cover_link: str
         description: str
         publish_year: int
 
 class BookList(BaseModel):
         name: str
         books: list[BookRecommendation] = Field(default_factory=list)
+        message:str
 
 class AuthorRecommendation(BaseModel):
     name:str
     about:str
-    photo_url:str
+    # photo_url:str
     birthday:date = None
     books: list[BookRecommendation] = Field(default_factory=list)
 
 class AuthorList(BaseModel):
     authors:list[AuthorRecommendation] = Field(default_factory=list)
+    message: str
 
 
 class RecommendationService:
@@ -190,7 +192,7 @@ class RecommendationService:
             response = self.client.chat.completions.create(
                 model="gpt-4o",
                 messages=[
-                    {"role": "system", "content": "Ти асистент, який допомагає керувати базою даних книг і авторів, а також керуєш списком уподобань користувача. А також рекомендуєш книжки, авторів"},
+                    {"role": "system", "content": "Ти корисний асистент, який допомагає керувати базою даних книг і авторів, а також керуєш списком уподобань користувача. А також рекомендуєш книжки, авторів"},
                     {"role": "user", "content": user_query}
                 ],
                 functions=self.functions)
@@ -203,8 +205,7 @@ class RecommendationService:
                 print(f"call {function_call} | name {function_name} | args {function_ars}")
                 if function_name in self.functions_map:
                     data = self.functions_map[function_name](**function_ars)
-                    result = data
-
+                    result = self.create_beautiful_chat_response(data)
                 else:
                     result = f"Oops {function_name} something went wrong."
 
@@ -233,8 +234,6 @@ class RecommendationService:
             print(f"Error occured : {e}")
             return None
 
-
-
     # todo add ukrainian translation
     def recommend_books_by_title(self, title):
 
@@ -262,3 +261,18 @@ class RecommendationService:
         json_response = self.request(message)
         print(json_response)
         return json_response
+
+    def create_beautiful_chat_response(self,data,):
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[{"role": "system",
+                           "content": "You are a helpful assistant that can convert user data to beautiful message."},
+                            {"role": "user", "content":  f"Please convert it : {data} to beautiful message. And please don't write 'here's your beautiful converted data etc.'"}
+                          ],
+            )
+            raw = response.choices[0].message.content
+            return raw
+        except Error as e:
+            print(f"Error occured : {e}")
+            return None
