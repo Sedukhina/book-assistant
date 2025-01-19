@@ -34,7 +34,7 @@ class BookBase(Base):
             "author": self.author.name if self.author else None,
             "publisher_id": self.publisher_id,
             "published_date": self.published_date.isoformat() if self.published_date else None,
-            "category": self.category,
+            "category": self.category_id if self.category_id else -1,
             "cover": self.cover,
             "ratings_count": float(self.ratings_count) if self.ratings_count else None,
         }
