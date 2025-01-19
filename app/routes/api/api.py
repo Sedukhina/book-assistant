@@ -8,9 +8,12 @@ from routes.api.user_api import user_api
 
 from routes.api.preferences_api import preferences_api
 
+from routes.api.recommendation_api import recommendation_api
+
 api_routes = Blueprint('api',__name__,url_prefix='/api')
 
 api_routes.register_blueprint(books_api)
 api_routes.register_blueprint(authors_api)
 api_routes.register_blueprint(user_api)
 api_routes.register_blueprint(preferences_api)
+api_routes.register_blueprint(recommendation_api)
