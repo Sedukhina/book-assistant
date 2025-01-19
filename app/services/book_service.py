@@ -81,7 +81,7 @@ class BookService:
             Returns author's books
         """
         try:
-            raw = self.session.query(BookBase).join(AuthorBase, BookBase.author_id == AuthorBase.id).filter(AuthorBase.name.ilike(f"%{author_name}%")).all()
+            raw = self.session.query(BookBase).join(AuthorBase, BookBase.author_id == AuthorBase.author_id).filter(AuthorBase.name.ilike(f"%{author_name}%")).all()
             return  [book.to_dict() for book in raw]
         except SQLAlchemyError as e:
             print(f"{e}")
