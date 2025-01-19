@@ -6,6 +6,7 @@
 
     <!-- Common / Base Styles -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- Placeholder for page-specific CSS -->
     {% block extra_css %}{% endblock %}
 </head>
@@ -17,7 +18,7 @@
         <ul class="nav-left">
             <li class="logo">BookAssistant</li>
             <li><a href="{{ url_for('home') }}">Home</a></li>
-            <li><a href="{{ url_for('books') }}">Search</a></li>
+            <li><a href="{{ url_for('favouriteList') }}">My List</a></li>
         </ul>
 
         <!-- Right side: Login/Register OR Username Dropdown -->

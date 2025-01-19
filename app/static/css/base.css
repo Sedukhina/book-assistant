@@ -20,7 +20,7 @@ body {
     display: flex;
     justify-content: space-between; /* Splits left and right nav sections */
     background-color: #563C28;     /* Rich brown */
-    padding: 1rem 2rem;
+    padding: 15px 30px;
 }
 
 /* Nav Lists */
@@ -105,13 +105,9 @@ body {
  *****************************************/
 footer {
     text-align: center;
-    padding: 1rem;
+    padding: 15px;
     background-color: #F0ECE5;
     color: #777;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
 }
 
 .toast {

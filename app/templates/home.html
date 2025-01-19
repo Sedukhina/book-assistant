@@ -13,15 +13,99 @@
 {% endblock %}
 
 {% block content %}
-{% include '3dModel.html' %}
-<section class="hero">
-    <h1>Welcome to BookAssistant</h1>
-    <p>Great to see you again, {{ username }}!</p>
-</section>
+<div class="search-page-container">
+    <!-- TOP SEARCH BAR (title) -->
 
-<section class="chat-section">
-    <h2>Голосовий чат</h2>
-    <div class="chat-container" id="chatContainer"></div>
-    <button id="recordButton" class="btn-primary">Записати голос</button>
-</section>
+    <!-- MAIN LAYOUT: LEFT FILTERS, RIGHT RESULTS -->
+    <div class="layout">
+        <!-- LEFT-SIDE FILTERS -->
+        <aside class="filters-column">
+            <h3>Filters</h3>
+
+            <!-- AUTHOR substring -->
+            <div class="filter-section">
+                <label for="author">Author:</label>
+                <input
+                        type="text"
+                        id="author"
+                        class="filter-input"
+                        placeholder="e.g., 'Austen'"
+                />
+            </div>
+
+            <!-- CATEGORIES (checkboxes) -->
+            <div class="filter-section">
+                <label>Categories:</label>
+                <div class="categories-list">
+                    <label>
+                        <input type="checkbox" name="categories" value="Classic"> Classic
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="Novel"> Novel
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="Non-fiction"> Non-fiction
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="Biology"> Biology
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="Physics"> Physics
+                    </label>
+                    <label>
+                        <input type="checkbox" name="categories" value="Survival"> Survival
+                    </label>
+                </div>
+            </div>
+
+            <!-- YEAR RANGE -->
+            <div class="filter-section">
+                <label>Publish Year (From – To):</label>
+                <div style="display: flex; gap: 0.5rem;">
+                    <input
+                            type="number"
+                            id="yearFrom"
+                            class="filter-input"
+                            placeholder="e.g. 1900"
+                    />
+                    <input
+                            type="number"
+                            id="yearTo"
+                            class="filter-input"
+                            placeholder="e.g. 2000"
+                    />
+                </div>
+            </div>
+
+            <!-- APPLY FILTERS -->
+            <div class="filter-actions">
+                <button class="btn-apply-filters" id="btnApplyFilters">Apply Filters</button>
+            </div>
+        </aside>
+
+        <!-- RIGHT-SIDE RESULTS GRID -->
+        <section class="results-grid">
+            <div class="top-search-bar">
+                <div class="search-title-form">
+                    <input
+                            type="text"
+                            id="searchTitle"
+                            placeholder="Search by book title..."
+                            class="search-title-input"
+                    />
+                    <button class="btn-search-title" id="btnSearch">Search</button>
+                </div>
+            </div>
+            <div class="grid-container" id="resultsContainer"></div>
+            <p class="no-results" id="noResultsMsg" style="display:none;">No results found.</p>
+        </section>
+
+        <section class="chat-section">
+            {% include '3dModel.html' %}
+            <h5>Assistant</h5>
+            <div class="chat-container" id="chatContainer"></div>
+            <button id="recordButton" class="btn-primary"><i class="fa-solid fa-microphone"></i></button>
+        </section>
+    </div>
+</div>
 {% endblock %}
