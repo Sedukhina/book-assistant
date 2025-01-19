@@ -57,13 +57,6 @@ class AuthorBase(Base):
 
     books = relationship("BookBase", back_populates="author")
 
-    def to_dict(self):
-        return {
-            "author_id": self.author_id,
-            "name": self.name,
-            "books": [book.id for book in self.books] if self.books else []
-        }
-
 class PublisherBase(Base):
     __tablename__ = 'publishers'
 
