@@ -16,7 +16,8 @@ authors_api = Blueprint('authors_api',__name__,url_prefix='/authors')
 def get_names():
     try:
         authors = books_service.get_authors_names()
-        return jsonify([{"id": author.author_id, "name": author.name} for author in authors])
+        print(authors)
+        return jsonify([{"id": author['author_id'], "name": author['name']} for author in authors])
     except Exception as e:
         print(f"Error: {e}")
         return jsonify({"error": str(e)}), 500
@@ -30,12 +31,12 @@ def find_by_name():
             return "Author not found",404
 
         # Retrieve the author's books
-        books = [{"id": book.id, "title": book.title} for book in author.books]
+        books = [{"id": book['id'], "title": book['title']} for book in author['books']]
 
         # Return the author details with their books
         return jsonify({
-            "id": author.author_id,
-            "name": author.name,
+            "id": author['author_id'],
+            "name": author['name'],
             "books": books
         }), 200
     except Exception as e:

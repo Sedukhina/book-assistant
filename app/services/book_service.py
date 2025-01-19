@@ -52,7 +52,9 @@ class BookService:
     def find_author_by_id(self,author_id):
         try:
             raw = self.session.query(AuthorBase).filter(AuthorBase.author_id == author_id).first()
-            return [author.to_dict() for author in raw]
+            if raw:
+                return raw.to_dict()
+            return None
         except SQLAlchemyError as e:
             print(f"{e}")
 
