@@ -8,51 +8,20 @@ from services.book_service import BookService
 
 from services.preferences_service import PreferencesService
 
-book_schema = {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Book",
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "string",
-      "format": "uuid",
-      "description": "Unique identifier for the book."
-    },
-    "title": {
-      "type": "string",
-      "description": "The title of the book."
-    },
-    "categories": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      },
-      "default": [],
-      "description": "List of categories associated with the book."
-    },
-    "author": {
-      "type": "string",
-      "description": "The author of the book."
-    },
-    "isbn": {
-      "type": "string",
-      "description": "The ISBN of the book."
-    },
-    "cover_link": {
-      "type": "string",
-      "description": "A link to the book's cover image."
-    },
-    "description": {
-      "type": "string",
-      "description": "A brief description of the book."
-    },
-    "publish_year": {
-      "type": "integer",
-      "description": "The year the book was published."
-    }
-  },
-  "required": ["id", "title", "author", "isbn", "publish_year"]
-}
+from pydantic import BaseModel,Field
+
+class RecommendedBook(BaseModel):
+        title: str
+        categories: list[str] = Field(default_factory=list)
+        author: str
+        isbn: str
+        cover_link: str
+        description: str
+        publish_year: int
+
+class BookList(BaseModel):
+        name: str
+        books: list[RecommendedBook] = Field(default_factory=list)
 
 
 class RecommendationService:
@@ -244,12 +213,13 @@ class RecommendationService:
             return None
 
 
+
     # todo add ukrainian translation
     def recommend_books_by_title(self, title):
 
         message = self.create_message(
             f"Recommend books similar to {title} and get books covers by isbn from openlibrary",
-           book_schema)
+            BookList.model_json_schema(mode="serialization"))
         json_response = self.request(message)
         print(json_response)
         return json_response
@@ -258,7 +228,7 @@ class RecommendationService:
         my_preferences = self.preference_service.get_all_data()
         message = self.create_message(
             f"Recommend books based on my list of preferences",
-            {"schema":book_schema,"preferences":my_preferences})
+            {"schema": BookList.model_json_schema(mode="serialization"),"preferences":my_preferences})
         json_response = self.request(message)
         print(json_response)
         return json_response
