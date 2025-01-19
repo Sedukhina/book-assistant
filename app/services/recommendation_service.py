@@ -1,4 +1,5 @@
 import json
+from datetime import date
 
 from openai import OpenAI
 
@@ -10,7 +11,7 @@ from services.preferences_service import PreferencesService
 
 from pydantic import BaseModel,Field
 
-class RecommendedBook(BaseModel):
+class BookRecommendation(BaseModel):
         title: str
         categories: list[str] = Field(default_factory=list)
         author: str
@@ -21,7 +22,17 @@ class RecommendedBook(BaseModel):
 
 class BookList(BaseModel):
         name: str
-        books: list[RecommendedBook] = Field(default_factory=list)
+        books: list[BookRecommendation] = Field(default_factory=list)
+
+class AuthorRecommendation(BaseModel):
+    name:str
+    about:str
+    photo_url:str
+    birthday:date = None
+    books: list[BookRecommendation] = Field(default_factory=list)
+
+class AuthorList(BaseModel):
+    authors:list[AuthorRecommendation] = Field(default_factory=list)
 
 
 class RecommendationService:
@@ -125,9 +136,18 @@ class RecommendationService:
                     },
                     "required": ["title"]
                 }
-            },{
+            },
+            {
                 "name":"recommend_books_based_my_list",
                 "description":"Recommends books based on provided preference list",
+                "parameters": {
+                    "type": "object",
+                    "properties": {}
+                }
+            },
+            {
+                "name": "recommend_authors_based_on_my_list",
+                "description": "Recommends authors based on provided preference list",
                 "parameters": {
                     "type": "object",
                     "properties": {}
@@ -160,7 +180,8 @@ class RecommendationService:
             "get_authors_data": self.preference_service.get_authors_data,
             "get_all_data": self.preference_service.get_all_data,
             "recommend_books_by_title":self.recommend_books_by_title,
-            "recommend_books_based_my_list":self.recommend_books_based_my_list
+            "recommend_books_based_my_list":self.recommend_books_based_my_list,
+            "recommend_authors_based_on_my_list":self.recommend_authors_based_on_my_list
         }
 
 #TODO fix error handling
@@ -229,6 +250,15 @@ class RecommendationService:
         message = self.create_message(
             f"Recommend books based on my list of preferences",
             {"schema": BookList.model_json_schema(mode="serialization"),"preferences":my_preferences})
+        json_response = self.request(message)
+        print(json_response)
+        return json_response
+
+    def recommend_authors_based_on_my_list(self):
+        my_preferences = self.preference_service.get_all_data()
+        message = self.create_message(
+            f"Recommend authors based on my list of preferences",
+            {"schema": AuthorList.model_json_schema(mode="serialization"), "preferences": my_preferences})
         json_response = self.request(message)
         print(json_response)
         return json_response
