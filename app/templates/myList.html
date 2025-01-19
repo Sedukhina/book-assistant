@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}My List{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/myList.css') }}">
+{% endblock %}
+
+{% block extra_js %}
+<script type="module" src="{{ url_for('static', filename='js/myList.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="my-list-container">
+    <h2 class="page-title">My Book List</h2>
+
+    <section class="results-grid">
+        <div class="grid-container" id="myListContainer"></div>
+        <p class="no-results" id="noResultsMsg" style="display:none;">No books in your list.</p>
+    </section>
+</div>
+{% endblock %}

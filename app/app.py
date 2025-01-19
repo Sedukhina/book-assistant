@@ -69,7 +69,7 @@ def favouriteList():
      """
      Serves the books.html file (client-side logic).
      """
-     return render_template("favouriteList.html")
+     return render_template("myList.html")
 #
 # @app.route("/api/books", methods=["GET"])
 # def get_books_api():
