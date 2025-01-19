@@ -1,13 +1,14 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from services.book_service import BookService
+from services.preferences_service import PreferencesService
 
 from db.db import get_session
 
 #get global session
-session = get_session()
+global_session = get_session()
 
 # Creates Book service
-book_service = BookService(session)
+book_service = BookService(global_session)
 
 
 books_api = Blueprint('books_api',__name__,url_prefix='/books')
@@ -19,12 +20,17 @@ def get_books():
         Api call to get boooks by filters
     """
     try:
+        username = session.get('username')
+        if not username:
+            return jsonify({"error": "Unauthorized"}), 401
+
+        preferences_service = PreferencesService(username)
+
         title = request.args.get("title", "").strip().lower()
         categories = request.args.get("genre", "").strip().lower() #TODO: categories should be separated in database
         author = request.args.get("author", "").strip().lower()
         published_year_from = request.args.get("year_from")
         published_year_to = request.args.get("year_to")
-
 
         filters = {
             'title': title,
@@ -36,6 +42,13 @@ def get_books():
 
         #retrives books from  db
         filtered = book_service.get_filtered_books(**filters)
+
+        user_preferences = preferences_service.get_preferences()
+
+        # add liked filed to books
+
+        for book in filtered:
+            book["liked"] = book["id"] in user_preferences.books
 
         #convert it to json-readable format
         # filtered_books = [book for book in filtered]

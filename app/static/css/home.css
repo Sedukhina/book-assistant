@@ -136,6 +136,7 @@ button#recordButton:hover {
 /* Container for the entire page */
 .search-page-container {
     padding: 30px;
+    padding-bottom: 0;
     background-color: #FAF7F2; /* subtle background */
 }
 
@@ -172,7 +173,7 @@ button#recordButton:hover {
 .layout {
     display: flex;
     gap: 2rem;
-    height: calc(100vh - 170px); /* Adjust as needed to fit your design */
+    height: calc(100vh - 140px); /* Adjust as needed to fit your design */
     overflow: hidden; /* Prevent overall page scroll */
 }
 

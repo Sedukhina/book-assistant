@@ -8,10 +8,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnApplyFilters = document.getElementById("btnApplyFilters");
   const searchTitle = document.getElementById("searchTitle");
 
-  // Optionally load all books on initial page load:
   loadBooks();
 
-  // The "Search" button (top bar) triggers a data fetch
   if (btnSearch) {
     btnSearch.addEventListener("click", () => {
       loadBooks();
@@ -26,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // The "Apply Filters" button (left side)
   if (btnApplyFilters) {
     btnApplyFilters.addEventListener("click", () => {
       loadBooks();
@@ -34,21 +31,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   async function loadBooks() {
-    // Gather Title from top bar
     const title = (document.getElementById("searchTitle")?.value || "").trim();
-
-    // Gather Author substring
     const author = (document.getElementById("author")?.value || "").trim();
-
-    // Gather Categories (checkboxes)
     const catCheckboxes = document.querySelectorAll('input[name="categories"]:checked');
     const categories = Array.from(catCheckboxes).map(cb => cb.value);
-
-    // Gather Year range
     const yearFrom = (document.getElementById("yearFrom")?.value || "").trim();
     const yearTo = (document.getElementById("yearTo")?.value || "").trim();
 
-    // Build query params
     const params = new URLSearchParams();
     if (title) params.append("title", title);
     if (author) params.append("author", author);
@@ -59,7 +48,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (yearTo) params.append("year_to", yearTo);
 
     try {
-      // Example: fetch from /api/books?title=...&author=... etc.
       const response = await fetch(`/api/books?${params.toString()}`);
       if (!response.ok) {
         throw new Error(`Server error: ${response.status}`);
@@ -72,8 +60,27 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
+  async function toggleFavorite(bookId, isFavorite, heartIcon) {
+    const method = isFavorite ? "DELETE" : "POST";
+    try {
+      const response = await fetch("/api/preferences/book", {
+        method: method,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ book_id: bookId }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to update favorite status");
+      }
+      heartIcon.style.color = isFavorite ? "gray" : "red";
+    } catch (err) {
+      console.error("Error updating favorite:", err);
+    }
+  }
+
   function renderBooks(books) {
-    resultsContainer.innerHTML = ""; // clear old results
+    resultsContainer.innerHTML = "";
 
     if (!books || books.length === 0) {
       noResultsMsg.style.display = "block";
@@ -82,42 +89,31 @@ document.addEventListener("DOMContentLoaded", () => {
     noResultsMsg.style.display = "none";
 
     books.forEach(book => {
-      // Create a card
       const card = document.createElement("div");
       card.classList.add("grid-item", "book-card");
+      card.style.position = "relative";
 
-      // Cover
       const coverWrapper = document.createElement("div");
       coverWrapper.classList.add("cover-wrapper");
       const img = document.createElement("img");
       img.alt = `${book.title} cover`;
-      // If your data has a "cover" property, use it; otherwise placeholder
-      if (book.cover) {
-        //img.src = `/static/img/covers/${book.cover}`;
-        img.src = `${book.cover}`;
-      } else {
-        img.src = `/static/img/bookCover.png`;
-      }
+      img.src = book.cover ? `${book.cover}` : `/static/img/bookCover.png`;
       coverWrapper.appendChild(img);
       card.appendChild(coverWrapper);
 
-      // Info
       const infoDiv = document.createElement("div");
       infoDiv.classList.add("book-info");
 
-      // Title
       const titleEl = document.createElement("h3");
       titleEl.classList.add("book-title");
       titleEl.textContent = book.title;
       infoDiv.appendChild(titleEl);
 
-      // Author
       const authorEl = document.createElement("p");
       authorEl.classList.add("book-author");
       authorEl.textContent = `By: ${book.author}`;
       infoDiv.appendChild(authorEl);
 
-      // Categories
       if (book.categories && book.categories.length > 0) {
         const catEl = document.createElement("p");
         catEl.classList.add("book-categories");
@@ -125,7 +121,6 @@ document.addEventListener("DOMContentLoaded", () => {
         infoDiv.appendChild(catEl);
       }
 
-      // Publish Year
       if (book.publishDate) {
         const yearEl = document.createElement("p");
         yearEl.classList.add("book-year");
@@ -133,7 +128,19 @@ document.addEventListener("DOMContentLoaded", () => {
         infoDiv.appendChild(yearEl);
       }
 
+      const heartIcon = document.createElement("i");
+      heartIcon.classList.add("fa", "fa-heart");
+      heartIcon.style.cursor = "pointer";
+      heartIcon.style.position = "absolute";
+      heartIcon.style.right = "10px";
+      heartIcon.style.bottom = "10px";
+      heartIcon.style.color = book.liked ? "red" : "gray";
+      heartIcon.addEventListener("click", () => {
+        toggleFavorite(book.id, heartIcon.style.color === "red", heartIcon);
+      });
+
       card.appendChild(infoDiv);
+      card.appendChild(heartIcon);
       resultsContainer.appendChild(card);
     });
   }
