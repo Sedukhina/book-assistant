@@ -4,6 +4,7 @@
     padding: 3em;
     background-color: #FAF7F2;
     max-width: 1000px;
+    width: fit-content;
     margin: 3rem auto;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
@@ -27,6 +28,7 @@
     gap: 2rem;
     align-items: flex-start;
     justify-content: center;
+    width: fit-content;
 }
 
 .book-cover img {
