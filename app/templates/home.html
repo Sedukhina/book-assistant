@@ -104,6 +104,16 @@
             {% include '3dModel.html' %}
             <h5>Assistant</h5>
             <div class="chat-container" id="chatContainer"></div>
+            <!-- Поле введення тексту -->
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="chatInput" 
+                    class="chat-input" 
+                    placeholder="Введіть повідомлення..." 
+                />
+                <button id="sendButton" class="btn-primary">-></button>
+            </div>
             <button id="recordButton" class="btn-primary"><i class="fa-solid fa-microphone"></i></button>
         </section>
     </div>

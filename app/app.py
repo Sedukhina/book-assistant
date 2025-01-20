@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 
 from services.scenarios.scenarios import execute_command
 from routes.api.api import api_routes
@@ -191,7 +191,43 @@ def chat_interface():
     Рендерить HTML-інтерфейс чату.
     """
     return render_template('chat.html')
+@app.route('/chat/manual', methods=['POST'])
+def chat_manual():
+    """
+    Обробляє текстовий запит від користувача.
+    """
+    data = request.json
+    user_text = data.get('text', '')
+
+    # Обробка тексту через сценарії
+    response = process_command(user_text)
+    tts_path = "static/response.mp3"
+
+    # Генерація аудіо відповіді
+    if os.path.exists(tts_path):
+        os.remove(tts_path)
+    text_to_speech_ukrainian(response, tts_path)
+
+    return jsonify({
+        'response': response,
+        'audio_file': f'/{tts_path}'
+    })
+
+@app.route('/api/gpt-response', methods=['POST'])
+def gpt_response():
+    """
+    Приймає команду від користувача і повертає відповідь від GPT.
+    """
+    data = request.json
+    command = data.get('command', '')
+
+    if not command:
+        return jsonify({'error': 'Команда не надана.'}), 400
+
+    response = process_command(command)
+    return jsonify({'response': response})
+
 
 if __name__ == '__main__':
-    init_db()
+    # init_db()
     app.run(debug=True, host='0.0.0.0', port=5555)

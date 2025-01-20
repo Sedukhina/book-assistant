@@ -217,9 +217,10 @@ class RecommendationService:
     def create_message(self, message, format):
         return [
             {"role": "system",
-             "content": "You are a helpful assistant that provides books, authors and categories recommendations."},
-            {"role": "user", "content": message + f"Return the data only in JSON format, {format}"}
+             "content": "Ти є корисним асистентом, який надає рекомендації щодо книг, авторів та категорій."},
+            {"role": "user", "content": message + f"Поверни дані лише у форматі JSON, {format}"}
         ]
+
 
     def request(self, message):
         try:
@@ -262,17 +263,18 @@ class RecommendationService:
         print(json_response)
         return json_response
 
-    def create_beautiful_chat_response(self,data,):
+    def create_beautiful_chat_response(self, data):
         try:
             response = self.client.chat.completions.create(
                 model="gpt-4o-mini",
-                messages=[{"role": "system",
-                           "content": "You are a helpful assistant that can convert user data to beautiful message."},
-                            {"role": "user", "content":  f"Please convert it : {data} to beautiful message. And please don't write 'here's your beautiful converted data etc.'"}
-                          ],
+                messages=[
+                {"role": "system",
+                 "content": "Ти є корисним асистентом. Скороти та переформатуй ці дані у стиснутий, читабельний список рекомендацій книг."},
+                {"role": "user", "content": f"Ось дані: {data}. Скороти їх і подай у зручному форматі."}
+            ],
             )
             raw = response.choices[0].message.content
             return raw
-        except Error as e:
-            print(f"Error occured : {e}")
+        except Exception as e:
+            print(f"Сталася помилка: {e}")
             return None

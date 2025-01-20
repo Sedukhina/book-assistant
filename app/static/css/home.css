@@ -78,6 +78,16 @@
     background-color: #45a049; /* Darker green on hover */
 }
 
+
+/* Загальні стилі для елемента <audio> */
+.audio-response {
+    max-width: 100%; /* Забезпечує, що аудіо залишається в межах контейнера */
+    height: 30px; /* Встановлює висоту аудіо-контролів */
+    display: block; /* Розміщує аудіо на новому рядку */
+    margin-top: 10px; /* Відступ між текстом і аудіо */
+    outline: none; /* Видаляє зайве обрамлення */
+}
+
 /* Chat */
 .chat-section {
     margin-top: 20px;
@@ -116,6 +126,43 @@
     margin-right: auto;
     text-align: left;
 }
+
+.chat-input-container {
+    display: flex;
+    width: 300px; /* Контейнер відповідає ширині .chat-container */
+    gap: 10px; /* Простір між полем введення і кнопкою */
+    margin-top: 10px;
+    box-sizing: border-box;
+}
+
+.chat-input {
+    flex-grow: 1; /* Дозволяє полю введення займати весь доступний простір */
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.btn-primary {
+    width: 70px; /* Фіксована ширина кнопки */
+    padding: 10px 15px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #563c28;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-sizing: border-box;
+}
+
+.btn-primary:hover {
+    background-color: #3e2b1e; /* Трохи темніший колір при наведенні */
+}
+
+
 
 button#recordButton {
     margin-top: 10px;
