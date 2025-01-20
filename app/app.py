@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+from flask import Flask, render_template, request, redirect, url_for, session, flash, abort
 from flask import Flask, jsonify, render_template, request
 
 from services.scenarios.scenarios import execute_command
@@ -6,6 +6,7 @@ from routes.api.api import api_routes
 from routes.book_routes import books_bp
 from tts import text_to_speech_ukrainian
 from stt import record_and_recognize
+from services.book_service import BookService
 from scenarios import process_command
 import os
 from db.db import init_db
@@ -15,6 +16,14 @@ app.secret_key = "REPLACE_WITH_A_SECRET_KEY"  # Required for session handling
 
 app.register_blueprint(api_routes)
 app.register_blueprint(books_bp)
+
+from db.db import get_session
+
+#get global session
+global_session = get_session()
+
+# Creates Book service
+book_service = BookService(global_session)
 
 # In-memory user store (for demo). In production, use a real DB & hashed passwords.
 users = {
@@ -63,6 +72,13 @@ def home():
     else:
         return redirect(url_for("login"))
 
+@app.route("/book/<string:book_id>", methods=['GET'])
+def book(book_id):
+    book = book_service.find_by_id(book_id)
+    print(book)
+    if not book:
+        abort(404)  # Return 404 if the book is not found
+    return render_template("book.html", book=book)
 
 @app.route("/favouriteList",methods=['GET'])
 def favouriteList():
@@ -229,5 +245,5 @@ def gpt_response():
 
 
 if __name__ == '__main__':
-    # init_db()
+    init_db()
     app.run(debug=True, host='0.0.0.0', port=5555)

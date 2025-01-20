@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/book.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="book-details-container">
+    <div class="book-header">
+        <h2 class="book-title">{{ book.title }}</h2>
+    </div>
+    <div class="book-content">
+        <div class="book-cover">
+            <img src="{{ book.cover }}" alt="{{ book.title }} cover">
+        </div>
+        <div class="book-info">
+            <p><strong>Author:</strong> {{ book.author }}</p>
+            <p><strong>Publisher:</strong> {{ book.publisher_id }}</p>
+            <p><strong>Published Date:</strong> {{ book.published_date }}</p>
+            <p><strong>Category:</strong> {{ book.category }}</p>
+            <p><strong>Ratings Count:</strong> {{ book.ratings_count }}</p>
+            <p class="book-description"><strong>Description:</strong> {{ book.description }}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

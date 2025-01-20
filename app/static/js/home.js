@@ -99,6 +99,10 @@ document.addEventListener("DOMContentLoaded", () => {
       img.alt = `${book.title} cover`;
       img.src = book.cover ? `${book.cover}` : `/static/img/bookCover.png`;
       coverWrapper.appendChild(img);
+      coverWrapper.addEventListener("click", () => {
+        window.open(`/book/${book.id}`, "_blank");
+      });
+
       card.appendChild(coverWrapper);
 
       const infoDiv = document.createElement("div");

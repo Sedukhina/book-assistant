@@ -304,6 +304,7 @@ button#recordButton:hover {
     height: 300px;
     background: #eee;
     overflow: hidden;
+    cursor: pointer;
 }
 .cover-wrapper img {
     width: 100%;

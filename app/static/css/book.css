@@ -1,0 +1,75 @@
+/* book.css - Enhanced styles for the book details page */
+
+.book-details-container {
+    padding: 3em;
+    background-color: #FAF7F2;
+    max-width: 1000px;
+    margin: 3rem auto;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    text-align: center;
+}
+
+.book-header {
+    margin-bottom: 2rem;
+}
+
+.book-title {
+    font-size: 2rem;
+    color: #3E2723;
+    font-family: "Playfair Display", serif;
+    font-weight: bold;
+}
+
+.book-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: flex-start;
+    justify-content: center;
+}
+
+.book-cover img {
+    width: 300px;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.book-cover img:hover {
+    transform: scale(1.05);
+}
+
+.book-info {
+    text-align: left;
+    font-size: 1.2rem;
+    color: #5D4037;
+    line-height: 1.8;
+    max-width: 500px;
+}
+
+.book-info p {
+    font-weight: 500;
+}
+
+.book-description {
+    font-style: italic;
+    color: #7E5733;
+    font-size: 1.1rem;
+}
+
+.book-info strong {
+    color: #3E2723;
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .book-content {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .book-cover img {
+        max-width: 100%;
+    }
+}

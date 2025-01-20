@@ -59,6 +59,9 @@ document.addEventListener("DOMContentLoaded", () => {
       img.alt = `${book.title} cover`;
       img.src = book.cover ? `${book.cover}` : "/static/img/bookCover.png";
       coverWrapper.appendChild(img);
+      coverWrapper.addEventListener("click", () => {
+        window.open(`/book/${book.id}`, "_blank");
+      });
       card.appendChild(coverWrapper);
 
       const infoDiv = document.createElement("div");
@@ -91,7 +94,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const removeBtn = document.createElement("button");
       removeBtn.textContent = "Remove";
       removeBtn.classList.add("btn-remove");
-      removeBtn.addEventListener("click", () => removeBook(book.id, card));
+      removeBtn.addEventListener("click", () => {
+        removeBook(book.id, card)
+      });
       card.appendChild(removeBtn);
 
       card.appendChild(infoDiv);
