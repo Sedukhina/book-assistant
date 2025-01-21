@@ -1,12 +1,15 @@
+from flask import session
+
 from services.recommendation_service import RecommendationService
 
-# Ініціалізація RecommendationService
-recommendation_service = RecommendationService(
-    api_key="key",
-    username="default_user"  # замініть на відповідного користувача
-)
+
 
 def process_command(command):
+    # Ініціалізація RecommendationService
+    recommendation_service = RecommendationService(
+        api_key="<API_KEY>",
+        username=session.get("username")
+    )
     """
     Використовує RecommendationService для генерації відповіді на команду користувача.
     """

@@ -197,9 +197,14 @@ def chat_record():
     # Генерація нового аудіофайлу
     if os.path.exists(tts_path):
         os.remove(tts_path)
-    text_to_speech_ukrainian(response, tts_path)
 
-    return jsonify({'text': text, 'response': response, 'audio_file': f'/{tts_path}'})
+    voice = response.get('voice')
+    data = response.get('text')
+
+    text_to_speech_ukrainian(voice, tts_path)
+
+
+    return jsonify({'text': text, 'response': data, 'audio_file': f'/{tts_path}'})
 
 @app.route('/chat', methods=['GET'])
 def chat_interface():
@@ -222,10 +227,13 @@ def chat_manual():
     # Генерація аудіо відповіді
     if os.path.exists(tts_path):
         os.remove(tts_path)
-    text_to_speech_ukrainian(response, tts_path)
+
+    voice = response.get('voice')
+    response_text = response.get('text')
+    text_to_speech_ukrainian(voice, tts_path)
 
     return jsonify({
-        'response': response,
+        'response': response_text,
         'audio_file': f'/{tts_path}'
     })
 

@@ -206,11 +206,10 @@ class RecommendationService:
                 if function_name in self.functions_map:
                     data = self.functions_map[function_name](**function_ars)
                     result = self.create_beautiful_chat_response(data)
+                    voice = self.create_voice_text_response(result)
                 else:
                     result = f"Oops {function_name} something went wrong."
-
-                print(result)
-                return result
+                return {"text": result, "voice": voice}
         except Error as e:
             print(f"Error occured : {e}")
 
@@ -269,8 +268,24 @@ class RecommendationService:
                 model="gpt-4o-mini",
                 messages=[
                 {"role": "system",
-                 "content": "Ти є корисним асистентом. Скороти та переформатуй ці дані у стиснутий, читабельний список рекомендацій книг."},
-                {"role": "user", "content": f"Ось дані: {data}. Скороти їх і подай у зручному форматі."}
+                 "content": "Ти є корисним асистентом. Скороти та переформатуй ці дані у стиснутий, читабельний список рекомендацій книг. Не використовуєш стилізацію текста"},
+                {"role": "user", "content": f"Ось дані: {data}. Скороти їх і подай у зручному форматі. Не використовуй стилізацію текста, та забудь за обкладинку"}
+            ],
+            )
+            raw = response.choices[0].message.content
+            return raw
+        except Exception as e:
+            print(f"Сталася помилка: {e}")
+            return None
+
+    def create_voice_text_response(self,data):
+        try:
+            response = self.client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=[
+                {"role": "system",
+                 "content": "Ти є корисним асистентом. Скороти та переформатуй ці дані у стиснутий текст, який для формування стислого аудіо. Не використовуєш стилізацію текста"},
+                {"role": "user", "content": f"Ось дані: {data}. Зроби стислий переказ у вигляді тексту, який можна прочитати вголос. Будь ласка, надай текст у звичайному форматі без розривів рядків та будь-якого іншого форматування, щоб його можна було прочитати вголос або використовувати без додаткового форматування. Не використовуй додаткової стилізації - жирний, курсив та інше"}
             ],
             )
             raw = response.choices[0].message.content
